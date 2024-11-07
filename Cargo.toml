@@ -1,0 +1,14 @@
+[package]
+name = "discord-timestamps"
+description = "A CLI utility to generate discord-formatted timestamps"
+version = "0.1.0"
+authors = ["Rose Peck"]
+repository = "https://github.com/sixfold-origami/remedian"
+license = "Apache-2.0"
+readme = "README.md"
+edition = "2021"
+keywords = ["discord", "CLI", "timestamp", "datetime"]
+
+[dependencies]
+clap = { version = "4.5.20", features = ["derive", "env"] }
+prettytable-rs = "0.10.0"
