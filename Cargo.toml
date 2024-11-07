@@ -1,9 +1,9 @@
 [package]
-name = "discord-timestamps"
+name = "discord-timestamp"
 description = "A CLI utility to generate discord-formatted timestamps"
 version = "0.1.0"
 authors = ["Rose Peck"]
-repository = "https://github.com/sixfold-origami/discord-timestamps"
+repository = "https://github.com/sixfold-origami/discord-timestamp"
 license = "Apache-2.0"
 readme = "README.md"
 edition = "2021"

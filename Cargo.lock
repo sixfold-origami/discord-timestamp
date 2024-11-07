@@ -256,7 +256,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "discord-timestamps"
+name = "discord-timestamp"
 version = "0.1.0"
 dependencies = [
  "chrono",

@@ -1,9 +1,9 @@
-# discord-timestamps
+# discord-timestamp
 
 CLI utility to generate discord-formatted timestamps
 
 ```
-Usage: discord-timestamps [OPTIONS] <INPUT> [STYLE]
+Usage: discord-timestamp [OPTIONS] <INPUT> [STYLE]
 
 Arguments:
   <INPUT>  Date/time string in the local timezone to convert to a discord timestamp
@@ -32,57 +32,57 @@ Provide a date/time (in your system's local timezone) and the formatting style, 
 
 Currently, installation is available through cargo:
 ```sh
-cargo install discord-timestamps
+cargo install discord-timestamp
 ```
 
 ## Examples
 
 Minimal:
 ```
-> discord-timestamps "2024-11-07 12:43:00"
+> discord-timestamp "2024-11-07 12:43:00"
 Formatting: 2024-11-07T12:43:00-05:00
 <t:1730965380>
 ```
 
 Using alternate styles:
 ```
-> discord-timestamps "2024-11-07 12:43:00" short-time
+> discord-timestamp "2024-11-07 12:43:00" short-time
 Formatting: 2024-11-07T12:43:00-05:00
 <t:1730965380:t>
 ```
 ```
-> discord-timestamps "2024-11-07 12:43:00" t
+> discord-timestamp "2024-11-07 12:43:00" t
 Formatting: 2024-11-07T12:43:00-05:00
 <t:1730965380:t>
 ```
 
 Copying the result to the clipboard
 ```
-> discord-timestamps -c "2024-11-07 12:43:00" t
+> discord-timestamp -c "2024-11-07 12:43:00" t
 Formatting: 2024-11-07T12:43:00-05:00
 <t:1730965380:t> copied to clipboard!
 ```
 
 Providing only the date or time:
 ```
-> discord-timestamps 2024-11-07
+> discord-timestamp 2024-11-07
 Formatting: 2024-11-07T00:00:00-05:00
 <t:1730955600>
 ```
 ```
-> discord-timestamps 12:43:00
+> discord-timestamp 12:43:00
 Formatting: 2024-11-07T12:43:00-05:00
 <t:1731001380>
 ```
 
 Using alternate date/time formats:
 ```
-> discord-timestamps --datetime-format "%m/%d/%y %I:%M%p" "11/7/24 2:43pm"
+> discord-timestamp --datetime-format "%m/%d/%y %I:%M%p" "11/7/24 2:43pm"
 Formatting: 2024-11-07T14:43:00-05:00
 <t:1731008580>
 ```
 ```
-> discord-timestamps --time-format %I:%M%p 2:43pm
+> discord-timestamp --time-format %I:%M%p 2:43pm
 Formatting: 2024-11-07T14:43:00-05:00
 <t:1731008580>
 ```
