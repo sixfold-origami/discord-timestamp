@@ -204,6 +204,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 
         table.set_format(*FORMAT_NO_BORDER_LINE_SEPARATOR);
         table.printstd();
+
+        return Ok(());
     }
 
     // Parse date
