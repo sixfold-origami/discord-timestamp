@@ -28,6 +28,13 @@ Options:
 
 Provide a date/time (in your system's local timezone) and the formatting style, and the tool will return the discord-compatible format string for that datetime! You can provide either a lone date, a lone time, or a full datetime to convert. If only the date is provided, then the time of midnight is used. If only the time is provided, then the date of today is used.
 
+## Installation
+
+Currently, installation is available through cargo:
+```sh
+cargo install discord-timestamps
+```
+
 ## Examples
 
 Minimal:
