@@ -2,6 +2,7 @@ use std::error::Error;
 
 use chrono::{FixedOffset, Local, NaiveDate, NaiveDateTime, NaiveTime, ParseError, TimeZone};
 use clap::{builder::ArgPredicate, Parser, ValueEnum};
+use cli_clipboard::{ClipboardContext, ClipboardProvider};
 use prettytable::{format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR, Table};
 
 const STYLE_HELP: [[&str; 5]; 8] = [
@@ -216,7 +217,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     let formatted = args.style.get_formatted(unix);
 
     // Output
-    println!("{}", formatted);
+    if args.copy_to_clipboard {
+        let mut ctx = ClipboardContext::new().unwrap();
+        ctx.set_contents(formatted.clone()).unwrap();
+        println!("{} copied to clipboard!", formatted);
+    } else {
+        println!("{}", formatted);
+    }
 
     Ok(())
 }
