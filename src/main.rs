@@ -1,3 +1,6 @@
+use std::error::Error;
+
+use chrono::{FixedOffset, Local, NaiveDate, NaiveDateTime, NaiveTime, ParseError, TimeZone};
 use clap::{builder::ArgPredicate, Parser, ValueEnum};
 use prettytable::{format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR, Table};
 
@@ -74,9 +77,47 @@ struct Cli {
     #[arg(short = 'c', long)]
     copy_to_clipboard: bool,
 
+    /// Format string for parsing datetimes
+    #[arg(
+        short = 'f',
+        long,
+        default_value = "%Y-%m-%d %H:%M:%S",
+        env = "DT_DATETIME_FORMAT"
+    )]
+    datetime_format: String,
+
+    /// Format string for parsing lone dates (assumes midnight)
+    #[arg(short = 'd', long, default_value = "%Y-%m-%d", env = "DT_DATE_FORMAT")]
+    date_format: String,
+
+    /// Format string for parsing lone times (assumes today)
+    #[arg(short = 't', long, default_value = "%H:%M:%S", env = "DT_TIME_FORMAT")]
+    time_format: String,
+
     /// Shows options (and abbreviations) for the style argument
     #[arg(long)]
     help_style: bool,
+}
+
+impl Cli {
+    fn get_naive_datetime(&self) -> Result<NaiveDateTime, ParseError> {
+        // Try to parse a full datetime
+        let datetime = NaiveDateTime::parse_from_str(&self.input, &self.datetime_format);
+        if datetime.is_ok() {
+            return datetime;
+        }
+
+        // Try to parse just a date
+        if let Ok(date) = NaiveDate::parse_from_str(&self.input, &self.date_format) {
+            return Ok(date.and_hms_opt(0, 0, 0).unwrap());
+        }
+
+        // Try to parse just a time
+        NaiveTime::parse_from_str(&self.input, &self.time_format).map(|time| {
+            let today = Local::now().date_naive();
+            NaiveDateTime::new(today, time)
+        })
+    }
 }
 
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, ValueEnum)]
@@ -93,7 +134,7 @@ enum Style {
 }
 
 impl Style {
-    fn get_formatted(&self, unix: usize) -> String {
+    fn get_formatted(&self, unix: i64) -> String {
         match self {
             Style::Default => format!("<t:{}>", unix),
             Style::ShortTime => format!("<t:{}:{}>", unix, self.code()),
@@ -143,9 +184,10 @@ impl Style {
     }
 }
 
-fn main() {
+fn main() -> Result<(), Box<dyn Error>> {
     let args = Cli::parse();
 
+    // Special style help command
     if args.help_style {
         let mut table = Table::from(STYLE_HELP);
         table.set_titles(
@@ -162,4 +204,19 @@ fn main() {
         table.set_format(*FORMAT_NO_BORDER_LINE_SEPARATOR);
         table.printstd();
     }
+
+    // Parse date
+    let datetime = args.get_naive_datetime()?;
+    let local = Local::from_offset(&FixedOffset::east_opt(0).unwrap());
+    let datetime = local.from_local_datetime(&datetime).unwrap();
+    println!("Formatting: {:?}", datetime);
+
+    // Get timestamp and formatted string
+    let unix = datetime.timestamp_millis() / 1000;
+    let formatted = args.style.get_formatted(unix);
+
+    // Output
+    println!("{}", formatted);
+
+    Ok(())
 }

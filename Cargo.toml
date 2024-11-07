@@ -10,5 +10,6 @@ edition = "2021"
 keywords = ["discord", "CLI", "timestamp", "datetime"]
 
 [dependencies]
+chrono = "0.4.38"
 clap = { version = "4.5.20", features = ["derive", "env"] }
 prettytable-rs = "0.10.0"
